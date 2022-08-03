@@ -7,7 +7,7 @@
 # Description: skeleton centerline extractor and vectorizator
 # ===========================================================
 
-from __future__ import division
+
 import numpy as np
 from scipy import interpolate
 from scipy.spatial import distance as scipy_dist
@@ -88,51 +88,51 @@ class AxisReader( object ):
         strides = self.BuildStrides()
         
         if self.start_from == 'b':
-            for i in xrange( self.hits.shape[0]-1, 0, -1 ):
+            for i in range( self.hits.shape[0]-1, 0, -1 ):
                 if np.all( self.hits[i,:] == 0 ): continue
-                for j in xrange( 1, self.hits.shape[1]-1 ):
+                for j in range( 1, self.hits.shape[1]-1 ):
                     for primitive in self.primitives:
-                        for iSide in xrange( 4 ):
+                        for iSide in range( 4 ):
                             seed = np.rot90( primitive, iSide )
                             if ( strides[i-1,j-1] == seed ).all():
                                 self.i0, self.j0 = i, j
                                 return None
 
         elif self.start_from == 't':
-            for i in xrange( 1, self.hits.shape[0] ):
+            for i in range( 1, self.hits.shape[0] ):
                 if np.all( self.hits[i,:] == 0 ): continue
-                for j in xrange( 1, self.hits.shape[1]-1 ):
+                for j in range( 1, self.hits.shape[1]-1 ):
                     if self.hits[i,j] == 0: continue
                     for primitive in self.primitives:
-                        for iSide in xrange( 4 ):
+                        for iSide in range( 4 ):
                             seed = np.rot90( primitive, iSide )
                             if ( strides[i-1,j-1] == seed ).all():
                                 self.i0, self.j0 = i, j
                                 return None
 
         elif self.start_from == 'l':
-            for j in xrange( 1, self.hits.shape[1] ):
+            for j in range( 1, self.hits.shape[1] ):
                 if np.all( self.hits[:,j] == 0 ): continue
-                for i in xrange( 1, self.hits.shape[0]-1 ):
+                for i in range( 1, self.hits.shape[0]-1 ):
                     for primitive in self.primitives:
-                        for iSide in xrange( 4 ):
+                        for iSide in range( 4 ):
                             seed = np.rot90( primitive, iSide )
                             if ( strides[i-1,j-1] == seed ).all():
                                 self.i0, self.j0 = i, j
                                 return None
 
         elif self.start_from == 'r':
-            for j in xrange( self.hits.shape[1]-1, 0, -1 ):
+            for j in range( self.hits.shape[1]-1, 0, -1 ):
                 if np.all( self.hits[:,j] == 0 ): continue
-                for i in xrange( 1, self.hits.shape[0]-1 ):
+                for i in range( 1, self.hits.shape[0]-1 ):
                     for primitive in self.primitives:
-                        for iSide in xrange( 4 ):
+                        for iSide in range( 4 ):
                             seed = np.rot90( primitive, iSide )
                             if ( strides[i-1,j-1] == seed ).all():
                                 self.i0, self.j0 = i, j
                                 return None
 
-        raise IndexError, 'First Point Not Found!'    
+        raise IndexError('First Point Not Found!')    
 
 
     def NeiDist( self, idx1, idx2 ):
@@ -154,11 +154,11 @@ class AxisReader( object ):
         N = 0 # Counter
         ijunct = 0 # Junction Index
 
-        for ITER in xrange( MAXITER ):
+        for ITER in range( MAXITER ):
             i0, j0 = I[-1], J[-1] # Previous Point
             self.hits[i0,j0] = 0 # Set it to 0 in the Hit&Miss Matrix
             seed = self.hits[i0-1:i0+2, j0-1:j0+2] # 3x3 neighboring element
-            pos = zip( *np.where( seed > 0 ) ) # Positive neighbors
+            pos = list(zip( *np.where( seed > 0 ) )) # Positive neighbors
 
             if len( pos ) == 0: # End Point of the channel found
                 break
@@ -210,7 +210,7 @@ class AxisReader( object ):
                 axijs = []
                 endpoints = []
                 resolved = []
-                for ij in xrange( len( pos ) ):
+                for ij in range( len( pos ) ):
                     first_point = ( pos[ij][0]+i0-1, pos[ij][1]+j0-1 ) # Initial Point of the Local Branch
                     removed_indexes = [ ij-1, (ij+1)%len(pos) ]
                     for idx in removed_indexes: self.hits[ pos[idx][0]+i0-1, pos[idx][1]+j0-1 ] = 0                    
@@ -225,7 +225,7 @@ class AxisReader( object ):
                 if dists.min() < 1:
                     pos, axijs, jncsw, endpoints = [ list(l) for l in zip(
                         *sorted( zip( pos, axijs, jncsw, endpoints ), key=lambda group: group[2] ) ) ]                        
-                    for ij in xrange( len( pos ) ): self.hits[ axijs[ij][1][:-1], axijs[ij][0][:-1] ] = 0
+                    for ij in range( len( pos ) ): self.hits[ axijs[ij][1][:-1], axijs[ij][0][:-1] ] = 0
                     I.extend( axijs[-1][1] )
                     J.extend( axijs[-1][0] )
                     continue
@@ -233,11 +233,11 @@ class AxisReader( object ):
                     
                 # Multithread channel junction
                 if self.call_depth==0:
-                    print 'channel junction at ', i0, j0, 'n branches %d - ' % len( pos ), \
-                        'starting recursion (this may require some time)...'
+                    print('channel junction at ', i0, j0, 'n branches %d - ' % len( pos ), \
+                        'starting recursion (this may require some time)...')
                 elif self.call_depth > 0 and self.verbose:
-                    print 'channel junction at ', i0, j0, 'n branches %d - ' % len( pos ), \
-                        'level of recursion: %d' % ( self.call_depth )
+                    print('channel junction at ', i0, j0, 'n branches %d - ' % len( pos ), \
+                        'level of recursion: %d' % ( self.call_depth ))
                     
                 jncsl = [] # Total Lengths of the Following Branches at Junction
                 jncsw = [] # Average Width of the Following Branches at Junction
@@ -245,7 +245,7 @@ class AxisReader( object ):
                 self.GetJunction( N )                    
                 axijs = []                
                 
-                for ij in xrange( len( pos ) ):
+                for ij in range( len( pos ) ):
                     
                     # For each of the Junctions is created a recursive instance
                     first_point = ( pos[ij][0]+i0-1, pos[ij][1]+j0-1 ) # Initial Point of the Local Branch
@@ -271,7 +271,7 @@ class AxisReader( object ):
                     jncsw.append( axij[2].mean() ) # Total path average width
                     rdepths.append(axr.call_depth ) # Total level of recursion
                     
-                jncsl, jncsw, rdepths = map( np.asarray, (jncsl,jncsw,rdepths) )
+                jncsl, jncsw, rdepths = list(map( np.asarray, (jncsl,jncsw,rdepths) ))
                 
                 if len(axijs) == 0: break # I could get a Zero sometimes but that's ok (only going backward on bifos)
                 
@@ -288,7 +288,7 @@ class AxisReader( object ):
                     rdepths = np.delete( rdepths, idx_to_rm )
                     IDX = jncsw.argmax()
                 else:
-                    raise ValueError, 'method %s not known. Must be either "std", "length" or "width"' % self.method
+                    raise ValueError('method %s not known. Must be either "std", "length" or "width"' % self.method)
 
                 # Take the Widest between the remaining branches
                 _J, _I, _ = axijs[ IDX ]
@@ -298,7 +298,7 @@ class AxisReader( object ):
                 break
 
         if ITER == MAXITER-1 and not self.method == 'fast':
-            print 'WARNING: Maximum number of iteration reached in axis extraction!'
+            print('WARNING: Maximum number of iteration reached in axis extraction!')
         I, J = np.asarray( I ), np.asarray( J )
         B = self.I[I, J]
         return [ J+self.yl, I+self.xl, B ]
@@ -331,7 +331,7 @@ def ReadAxisLine( I, flow_from=None, method='std', MAXITER=100000 ):
     
     r = AxisReader( I, start_from=flow_from, method=method )
     [ Xpx, Ypx, Bpx ] = r( MAXITER=MAXITER )
-    print 'axis read with a recursion level of %s' % r.call_depth
+    print('axis read with a recursion level of %s' % r.call_depth)
     line = Line2D( x=Xpx, y=Ypx, B=Bpx )
     return line
 

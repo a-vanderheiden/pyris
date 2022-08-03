@@ -1,4 +1,4 @@
-from __future__ import division
+
 import numpy as np
 from skimage import morphology as mm
 

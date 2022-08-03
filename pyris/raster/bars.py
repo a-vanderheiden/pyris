@@ -7,7 +7,7 @@
 # Description: skeleton centerline extractor and vectorizator
 # ===========================================================
 
-from __future__ import division
+
 import os, sys
 import numpy as np
 from scipy import ndimage, interpolate as scipy_interp
@@ -78,7 +78,7 @@ class Unwrapper( object ):
         angle = np.arctan2( np.gradient( Y ),  np.gradient( X ) )
 
         # Create Cartesian Coorinates Array for Intrinsic Coordinate Grid
-        for i in xrange( S.size ):
+        for i in range( S.size ):
             n = N * B[i] # Pixel Units Transverse Coordinate
             self.Xc[i,:] = X[i] + n[:]*np.cos( angle[i]-np.pi/2 )
             self.Yc[i,:] = Y[i] + n[:]*np.sin( angle[i]-np.pi/2 )
@@ -186,9 +186,9 @@ class BarFinder( object ):
         num_features = self.BarIdx.max() # Number of Bar Features
         IC, JC = np.zeros(num_features,dtype=int), np.zeros(num_features,dtype=int) # Indexes of Bar Centroids
         # Compute Bar Centroids
-        for n in xrange( 1,num_features ): [ IC[n-1], JC[n-1] ] = ndimage.measurements.center_of_mass( self.Bars==(n) )
+        for n in range( 1,num_features ): [ IC[n-1], JC[n-1] ] = ndimage.measurements.center_of_mass( self.Bars==(n) )
         # Apply a Correction to the Transverse Position of the Centroid: we take the position of the maximum longitudinal extension (main s axis)
-        for n in xrange( 1,num_features ):
+        for n in range( 1,num_features ):
             s_lengths = (self.Bars==n).sum(axis=0)
             pos = np.where( s_lengths == s_lengths.max() )[0]
             JC[n-1] = int( ( pos.min() + pos.max() ) / 2 )
@@ -325,7 +325,7 @@ class BarFinder( object ):
         plt.plot( XC[:,0], YC[:,0], 'k', lw=2 )
         plt.plot( XC[:,-1], YC[:,-1], 'k', lw=2 )    
         # Draw Cross Sections
-        for i in xrange(1, self.unwrapper.s.size-1, 10):
+        for i in range(1, self.unwrapper.s.size-1, 10):
             ax2.plot( XC[i,:], YC[i,:], 'k' )
             ax2.text( XC[i,-1], YC[i,-1], 's=%s' % int(self.unwrapper.s[i]/self.unwrapper.b.mean()) )
             ax3.plot( XC[i,:], YC[i,:], 'k' )
@@ -699,7 +699,7 @@ class FreeTemporalBars( TemporalBars ):
                 f = plt.figure()
                 plt.pcolormesh( BarsL.unwrapper.XC, BarsL.unwrapper.YC, BarsL.Bars, cmap='Spectral', alpha=0.5 )
                 plt.contour( BarsR.unwrapper.XC, BarsR.unwrapper.YC, BarsR.Bars>0, 1, cmap='binary_r', linewidths=3 )
-                for i in xrange( len(BarCorr) ):
+                for i in range( len(BarCorr) ):
                     if BarCorr[i][5]<0: continue
                     [ x0, y0 ] = BarCorr[i][3:5]
                     #[ x1, y1 ] = BarCorr[i][8:10]
@@ -733,9 +733,9 @@ class FreeTemporalBars( TemporalBars ):
             s, n = Finder.unwrapper.s, Finder.unwrapper.N
             NMAX = len( BarCorr )
             I, J = np.zeros( NMAX, dtype=int ), np.zeros( NMAX, dtype=int )
-            dsi, dni, dxi, dyi, dmi, dzi = map( NaNs, [NMAX]*6 )
+            dsi, dni, dxi, dyi, dmi, dzi = list(map( NaNs, [NMAX]*6 ))
             hwidths[iFinder] = Finder.unwrapper.b.mean()
-            for i in xrange( NMAX ): # For each Bar in the Time Frame
+            for i in range( NMAX ): # For each Bar in the Time Frame
                 I[i] = BarCorr[i][1] # Longitudinal Position of Bar Centroid
                 J[i] = BarCorr[i][2] # Transversal Position of Bar Centroid
                 dsi[i] = BarCorr[i][10] # Longitudinal Distance to which the Bar Centroid has Migrated
@@ -757,7 +757,7 @@ class FreeTemporalBars( TemporalBars ):
                 plt.colorbar()
                 plt.contour( Finder.unwrapper.XC, Finder.unwrapper.YC, Finder.Bars>0, 1, colors='g', linewidths=2 )
                 plt.contour( self.Bars[iFinder+1].unwrapper.XC, self.Bars[iFinder+1].unwrapper.YC, self.Bars[iFinder+1].Bars>0, 1, colors='r', linewidths=2 )
-                for i in xrange( len(BarCorr) ):
+                for i in range( len(BarCorr) ):
                     if BarCorr[i][5]<0: continue
                     [ x0, y0 ] = BarCorr[i][3:5]
                     #[ x1, y1 ] = BarCorr[i][8:10]
@@ -778,7 +778,7 @@ class FreeTemporalBars( TemporalBars ):
                 plt.pcolor( Finder.unwrapper.Sc, Finder.unwrapper.Nc, np.ma.array(Z,mask=np.isnan(Z)).T, cmap='viridis' )
                 plt.colorbar()
                 plt.contour( Finder.unwrapper.Sc, Finder.unwrapper.Nc, Finder.Bars.T>0, 1, colors='r' )
-                for i in xrange( len(BarCorr) ):
+                for i in range( len(BarCorr) ):
                     if BarCorr[i][5]<0: continue
                     [ s0, n0 ] = si[i], ni[i]
                     [ ds, dn ] = dsi[i]/hwidths[iFinder], dni[i]
@@ -794,7 +794,7 @@ class FreeTemporalBars( TemporalBars ):
         for cnt, (BarCorr, Finder, T1, T2) in enumerate( zip(self.BarsCorr, self.Bars[:-1], self.T[:-1], self.T[1:]) ): # For all the TimeFrames
             dT = (T2-T1)
             icnt = 0
-            for i in xrange( len(BarCorr) ): # For all the Channel Bars in the Current TimeFrame
+            for i in range( len(BarCorr) ): # For all the Channel Bars in the Current TimeFrame
                 if BarCorr[i][5]<0: continue
                 icnt += 1
                 Xi.append( BarCorr[i][3] ), Yi.append( BarCorr[i][4] )
@@ -816,7 +816,7 @@ class FreeTemporalBars( TemporalBars ):
             except ValueError:
                 Wi += NaNs( icnt ).tolist()
 
-        Xi, Yi, Si, Ni, DSi, DNi, YYi, Wi = map( np.asarray, (Xi, Yi, Si, Ni, DSi, DNi, YYi, Wi) )
+        Xi, Yi, Si, Ni, DSi, DNi, YYi, Wi = list(map( np.asarray, (Xi, Yi, Si, Ni, DSi, DNi, YYi, Wi) ))
 
         X, Y = self.Bars[0].unwrapper.XC, self.Bars[0].unwrapper.YC # Reference 
         S, N = self.Bars[0].unwrapper.Sc*self.Bars[0].unwrapper.b.mean()/Bavg, self.Bars[0].unwrapper.Nc
@@ -837,7 +837,7 @@ class FreeTemporalBars( TemporalBars ):
             cs = [plt.cm.RdYlBu_r(xx) for xx in np.linspace(0,1,len(self.BarsCorr))]
             for cnt, (BarCorr, Finder, T1, T2) in enumerate( zip(self.BarsCorr, self.Bars[:-1], self.T[:-1], self.T[1:]) ):
                 dT = (T2 - T1)
-                for i in xrange( len(BarCorr) ):
+                for i in range( len(BarCorr) ):
                     if BarCorr[i][5]<0: continue
                     #BarCorr.append( [iBarL, IL, JL, XcL, YcL, iBarR, IR, JR, xR[iBarR], yR[iBarR], rR, nR, RL*L0/lL+S_0] )
                     [ s0, n0 ] = BarCorr[i][12]/Bavg, Finder.unwrapper.N[BarCorr[i][2]]
@@ -861,7 +861,7 @@ class FreeTemporalBars( TemporalBars ):
         if False: #True: # False:
             plt.figure()
             si, ni, dsi, dni = [np.array(x) for x in zip(*sorted(zip(Si.tolist(), Ni.tolist(), DSi.tolist(), DNi.tolist()), key=lambda pair: pair[0]))]
-            for ifilter in xrange(10): dsi[1:-1] * 0.25 * (dsi[:-2] + dsi[2:] + 2*dsi[1:-1])
+            for ifilter in range(10): dsi[1:-1] * 0.25 * (dsi[:-2] + dsi[2:] + 2*dsi[1:-1])
             plt.plot(si, dsi, 'o')
 
             plt.show()

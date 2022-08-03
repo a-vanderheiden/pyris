@@ -7,14 +7,14 @@
 # =======================================
 
 try:
-    import ConfigParser
+    import configparser
 except ImportError:
     import configparser as ConfigParser
 
 def default_config():
     '''Set up a configuration file for PyRIS'''
     
-    cf = ConfigParser.RawConfigParser()
+    cf = configparser.RawConfigParser()
     
     cf.add_section( 'Data' )
     cf.set( 'Data', 'input', '' )
@@ -45,7 +45,7 @@ def create_cfg_file( cf, fname='' ):
 
 def get_cfg( fname ):
     '''Get Configuration'''
-    cf = ConfigParser.RawConfigParser()
+    cf = configparser.RawConfigParser()
     cf.read( fname )
     return cf
 

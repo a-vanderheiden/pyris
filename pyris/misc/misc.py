@@ -6,7 +6,7 @@
 # Description: Collection of miscellaneous functions
 # ==================================================
 
-from __future__ import division
+
 import os
 import numpy as np
 import matplotlib as mpl
@@ -74,8 +74,8 @@ def LoadLandsatData( dirname ):
     '''
     Load Relevant Bands for the Current Landsat Data
     '''
-    if any( [os.path.split(dirname)[-1].startswith( s ) for s in ['LC8', 'LC08']] ): bidx = range( 2, 8 )
-    else: bidx = range( 1, 6 ) + [7]
+    if any( [os.path.split(dirname)[-1].startswith( s ) for s in ['LC8', 'LC08']] ): bidx = list(range( 2, 8))
+    else: bidx = list(range( 1, 6)) + [7]
     base = os.path.join( dirname, os.path.basename(dirname) )
     ext = '.TIF'
     bnames = [ ('_B'.join(( base, '%d' % i )))+ext for i in bidx ]
@@ -180,7 +180,7 @@ class interactive_mask( object ):
             b1, b2, b3 = 'B6', 'B5', 'B4'
         else:
             b1, b2, b3 = 'B5', 'B4', 'B3'
-        B1, B2, B3 = map( imread, [ os.path.join( self.path, '_'.join((self.name,bname))+'.TIF' ) for bname in [ b1, b2, b3 ] ] )
+        B1, B2, B3 = list(map( imread, [ os.path.join( self.path, '_'.join((self.name,bname))+'.TIF' ) for bname in [ b1, b2, b3 ] ] ))
         return np.dstack( ( B1, B2, B3 ) )
 
     def _set_mask( self ):
@@ -210,8 +210,8 @@ class interactive_mask( object ):
                   else (x_release, x_press+1)
                 (ys, ye) = (y_press, y_release+1) if (y_press <= y_release) \
                   else (y_release, y_press+1)
-                print( "The mask you selected is [{0}:{1},{2}:{3}]".format(
-                    xs, xe, ys, ye) )
+                print(( "The mask you selected is [{0}:{1},{2}:{3}]".format(
+                    xs, xe, ys, ye) ))
                 white_masks.append( [ ys, ye, xs, xe ] )
                 plt.fill( [xs,xe,xe,xs,xs], [ys,ys,ye,ye,ys], 'r', alpha=0.25 )
                 event.canvas.draw()
@@ -288,8 +288,8 @@ class MaskClean( object ):
                   else (x_release, x_press+1)
                 (ys, ye) = (y_press, y_release+1) if (y_press <= y_release) \
                   else (y_release, y_press+1)
-                print( "Slice [{0}:{1},{2}:{3}] will be set to {4}".format(
-                    xs, xe, ys, ye, 0) )
+                print(( "Slice [{0}:{1},{2}:{3}] will be set to {4}".format(
+                    xs, xe, ys, ye, 0) ))
                 self.bw[ ys:ye,xs:xe ] = 0
                 plt.fill( [xs,xe,xe,xs,xs], [ys,ys,ye,ye,ys], 'r', alpha=0.25 )
                 event.canvas.draw()
