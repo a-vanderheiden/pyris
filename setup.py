@@ -48,7 +48,7 @@ setup(
     description = description,
     long_description = long_description,
     url = 'https://github.com/fmonegaglia/pyris',
-    install_requires = [ 'numpy', 'scipy', 'matplotlib', 'scikit-image', 'gdal' ],
+    install_requires = [ 'numpy', 'scipy', 'matplotlib', 'scikit-image', 'osgeo' ],
     packages = [ 'pyris', 'pyris.config', 'pyris.misc', 'pyris.raster', 'pyris.vector' ],
     scripts = [pyris_script],
     
