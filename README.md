@@ -38,4 +38,13 @@ On Windows
 ### Run Instruction ###
 * Call pyris from the command line:
       pyris [args]
+    
 * 'pyris --help' provides information on the required arguments
+
+### Config Help ###
+
+* Create a blank config file with a given file name:
+      pyris <file_name> --init
+
+* `flow_from` corresponds to what side of the image flow originates. Needs to be one of the 4 letters below:
+     't', 'b', 'l', or 'r'
