@@ -2,3 +2,9 @@ data/
 
 .DS_Store
 */.DS_Store/*
+
+test_
+*/test_*/*
+
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
