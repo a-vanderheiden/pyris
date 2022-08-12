@@ -192,7 +192,7 @@ def segment_all( landsat_dirs, geodir, config, maskdir, auto_label=None ):
 
         # Label Masks - we need to perform a rotation in order to have labels going from the largest to the smallest
         rot_angle = { 'b': 0, 'l': 1, 't': 2, 'r': 3 } # Counter-clockwise rotationan angle
-        mask = np.rot90( mask, rot_angle[config.get( 'Data', 'flow_from' )] )
+        mask = np.rot90( mask, rot_angle[config.get( 'Data', 'flow_from' )] )  # Add feedback that the user needs to specify a "flow_from" direction in config file
         mask_lab, num_features = ndimage.measurements.label( mask )
         # Rotate back to the original
         mask = np.rot90( mask, -rot_angle[config.get( 'Data', 'flow_from' )] )
@@ -233,7 +233,7 @@ def segment_all( landsat_dirs, geodir, config, maskdir, auto_label=None ):
 
         print('saving  mask and GeoTransf data...')
         np.save( maskfile, mask )
-        with open( geofile, 'w' ) as gf: pickle.dump( GeoTransf, gf )
+        with open( geofile, 'wb' ) as gf: pickle.dump( GeoTransf, gf )   # Andrew changed the mode: 'w' -> 'wb' 
     return None
 
 
@@ -425,7 +425,7 @@ def vectorize_all( geodir, maskdir, skeldir, config, axisdir, use_geo=True ):
         print('Processing file %s' % ( maskfile ))
 
         # Load mask, skeleton and GeoFile
-        if use_geo: GeoTransf = pickle.load( open( geofile ) )
+        if use_geo: GeoTransf = pickle.load( open( geofile, 'rb' ) )     # rb added by Andrew
         mask = np.load( maskfile ).astype( int )
         skel = np.load( skelfile ).astype( int )
         num_features = mask.max()
