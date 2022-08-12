@@ -1,14 +1,19 @@
+# Data directory
 data/
 
+# Mac .DS_Store
 .DS_Store
 */.DS_Store/*
 
+# Test files
 test_
 */test_*/*
 
+# Notebook files
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
+# Directories generated from setup.py
 build/
 dist/
 pyris.egg-info
