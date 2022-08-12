@@ -20,3 +20,7 @@ pyris.egg-info
 
 # Specific config files generated for pyris runs
 *config*.txt
+
+# Pycache files
+__pycache__
+*/__pycache__/*
