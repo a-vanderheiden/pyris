@@ -1,0 +1,14 @@
+name: pyris
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8.*
+  - numpy
+  - scipy
+  - matplotlib
+  - scikit-image
+  - gdal
+  - jupyter
+  - rasterio
+  - geemap
