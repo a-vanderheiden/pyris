@@ -17,3 +17,6 @@ test_
 build/
 dist/
 pyris.egg-info
+
+# Specific config files generated for pyris runs
+*config*.txt
