@@ -8,3 +8,7 @@ test_
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+
+build/
+dist/
+pyris.egg-info
