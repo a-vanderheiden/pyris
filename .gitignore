@@ -6,7 +6,7 @@ data/
 */.DS_Store/*
 
 # Test files
-test_
+test_*
 */test_*/*
 
 # Notebook files
