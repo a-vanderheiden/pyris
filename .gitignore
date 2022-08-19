@@ -24,3 +24,6 @@ pyris.egg-info
 # Pycache files
 __pycache__
 */__pycache__/*
+
+# VS Code
+.vscode
