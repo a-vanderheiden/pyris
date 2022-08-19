@@ -577,7 +577,7 @@ def bars_detection( landsat_dirs, geodir, axisdir, migdir, bardir, show=False ):
 
         print('Processing file %s' % basename)
 
-        GeoTransf = pickle.load( open(geo_file) )
+        GeoTransf = pickle.load( open(geo_file, 'rb') )
         axis = load( axis_file )
         mig = load( mig_file )
 
