@@ -38,9 +38,7 @@ def InterpPCS( x, y, N=1000, s=None, with_derivatives=True, k=3 ):
     d2y_PCS            2st order spatial y derivative interpolated
     '''
 
-    print([x,y])
     tckp, u = interpolate.splprep( [x, y], s=s, k=k ) # Parametric Representation
-    print(0, type(0), 1, type(1), N, type(N))
     u_PCS = np.linspace( 0, 1, N ) # ArcLength
     x_PCS, y_PCS = interpolate.splev( u_PCS, tckp, der=0 )
     if with_derivatives:
