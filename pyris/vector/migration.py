@@ -295,7 +295,14 @@ class AxisMigration( object ):
         [ x2, y2, s2 ] = data2['x'], data2['y'], data2['s']
         [ dx, dy, dz]  = [ NaNs( x1.size ), NaNs( x1.size ), NaNs( x1.size ) ]
 
+        print('s1:\n---','\n', s1,'\n')
+        print('s2:\n---','\n', s2,'\n')
+        print('I1:', I1)
+
         for i, (il,ir) in self.Iterbends( I1 ):
+            print(f'\nBend {i}')
+            print('il, ir: ', (il, ir))
+
             # Isolate Bend
 
             if B12[il] < 0: continue # Bend Is not Correlated
@@ -306,8 +313,13 @@ class AxisMigration( object ):
             mask2 = B2==B12[il]
             bx1, by1, bs1, N1 = x1[mask1], y1[mask1], s1[mask1], mask1.sum() # Bend in First Planform
             bx2, by2, bs2, N2 = x2[mask2], y2[mask2], s2[mask2], mask2.sum() # Bend in Second Planform
+            print('N1:', N1)
+            print('N2:', N2)
+            print(f'Range to Sample (np.arange(2, N2-2)): {np.arange(2, N2-2)}')
+            print(f"Number of samples (N2-N1): {N2-N1}")
+
             if N1<=1 or N2<=1: continue
-            if N2 > N1: # Remove Random Points from Second Bend in order to interpolate
+            if N2-4 > N1: # Remove Random Points from Second Bend in order to interpolate  <--- Andrew added -4 to account for the random choice removal
                 idx = np.full( N2, True, bool )
                 idx[ np.random.choice( np.arange(2,N2-2), N2-N1, replace=False ) ] = False
                 bx2 = bx2[ idx ]
@@ -354,9 +366,12 @@ class AxisMigration( object ):
         self.FilterAll( pfreq=pfreq )
         self.GetAllInflections()
         self.CorrelateInflections()
+        print("Inflection Points:\n", self.CI1)
         self.LabelAllBends()
+        print ("Bends:\n", self.BI)
         self.AllBUDs()
         self.CorrelateBends()
+        print ("Correlated Bends:\n", self.B12)
         self.AllMigrationRates()
         return self.dx, self.dy, self.dz, self.Css, self.BI, self.B12, self.BUD
 
